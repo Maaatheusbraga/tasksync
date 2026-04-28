@@ -1,0 +1,25 @@
+﻿# env / segredos
+.env
+**/.env
+!.env.example
+# python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+# backend runtime
+backend/uploads/
+*.log
+# frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+# sistema/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
