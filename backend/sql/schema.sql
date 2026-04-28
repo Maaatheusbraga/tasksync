@@ -1,0 +1,100 @@
+CREATE DATABASE TaskSyncDB;
+GO
+USE TaskSyncDB;
+GO
+
+CREATE TABLE setores (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nome VARCHAR(100) UNIQUE NOT NULL,
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE usuarios (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    senha_hash VARCHAR(255) NOT NULL,
+    avatar_url VARCHAR(255) NULL,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'EDITOR', 'VIEWER')),
+    setor_id INT NULL FOREIGN KEY REFERENCES setores(id),
+    ativo BIT NOT NULL DEFAULT 1,
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE quadros (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL,
+    setor_id INT NOT NULL FOREIGN KEY REFERENCES setores(id),
+    created_by INT NOT NULL FOREIGN KEY REFERENCES usuarios(id),
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE colunas (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    ordem INT NOT NULL,
+    is_done BIT NOT NULL DEFAULT 0,
+    exige_anexo_para_entrada BIT NOT NULL DEFAULT 0,
+    quadro_id INT NOT NULL FOREIGN KEY REFERENCES quadros(id),
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE tarefas (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    titulo VARCHAR(200) NOT NULL,
+    descricao VARCHAR(MAX) NULL,
+    prazo DATE NOT NULL,
+    status_prazo VARCHAR(20) NOT NULL,
+    ordem_coluna INT NOT NULL DEFAULT 0,
+    data_conclusao DATETIME2 NULL,
+    quadro_id INT NOT NULL FOREIGN KEY REFERENCES quadros(id),
+    coluna_id INT NOT NULL FOREIGN KEY REFERENCES colunas(id),
+    responsavel_id INT NULL FOREIGN KEY REFERENCES usuarios(id),
+    created_by INT NOT NULL FOREIGN KEY REFERENCES usuarios(id),
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+    updated_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE subtarefas (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    titulo VARCHAR(200) NOT NULL,
+    concluida BIT NOT NULL DEFAULT 0,
+    tarefa_id INT NOT NULL FOREIGN KEY REFERENCES tarefas(id),
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE anexos (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nome_arquivo VARCHAR(255) NOT NULL,
+    caminho_arquivo VARCHAR(500) NOT NULL,
+    tarefa_id INT NOT NULL FOREIGN KEY REFERENCES tarefas(id),
+    uploaded_by INT NOT NULL FOREIGN KEY REFERENCES usuarios(id),
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE comentarios (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    conteudo VARCHAR(MAX) NOT NULL,
+    tarefa_id INT NOT NULL FOREIGN KEY REFERENCES tarefas(id),
+    usuario_id INT NOT NULL FOREIGN KEY REFERENCES usuarios(id),
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE logs_atividade (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    tarefa_id INT NOT NULL FOREIGN KEY REFERENCES tarefas(id),
+    usuario_id INT NOT NULL FOREIGN KEY REFERENCES usuarios(id),
+    tipo_acao VARCHAR(20) NOT NULL CHECK (tipo_acao IN ('MOVE','UPDATE','DELETE','CREATE')),
+    detalhe VARCHAR(MAX) NOT NULL,
+    coluna_origem_id INT NULL FOREIGN KEY REFERENCES colunas(id),
+    coluna_destino_id INT NULL FOREIGN KEY REFERENCES colunas(id),
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE notificacoes (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    usuario_id INT NOT NULL FOREIGN KEY REFERENCES usuarios(id),
+    mensagem VARCHAR(255) NOT NULL,
+    lida BIT NOT NULL DEFAULT 0,
+    created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
