@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import MetricsDashboard from "./components/MetricsDashboard";
 import NewBoardModal from "./components/NewBoardModal";
 import NewTaskModal from "./components/NewTaskModal";
+import NewUserModal from "./components/NewUserModal";
 import Sidebar from "./components/Sidebar";
 import TaskDrawer from "./components/TaskDrawer";
 import Topbar from "./components/Topbar";
@@ -41,6 +42,7 @@ export default function App() {
     onInlineUpdate,
     onCreateTask,
     onCreateBoard,
+    onCreateUser,
     onRenameBoard,
     onCreateColumn,
     onRenameColumn,
@@ -61,6 +63,7 @@ export default function App() {
   const [view, setView] = useState("board");
   const [showNewTask, setShowNewTask] = useState(false);
   const [showNewBoard, setShowNewBoard] = useState(false);
+  const [showNewUser, setShowNewUser] = useState(false);
   const [defaultColumnId, setDefaultColumnId] = useState(null);
   const [toast, setToast] = useState(null);
 
@@ -104,6 +107,7 @@ export default function App() {
         onChangeView={setView}
         isAdmin={isAdmin}
         onCreateBoard={() => setShowNewBoard(true)}
+        onCreateUser={() => setShowNewUser(true)}
       />
 
       <main className="main-area">
@@ -215,6 +219,13 @@ export default function App() {
         onClose={() => setShowNewBoard(false)}
         setores={setores}
         onCreate={onCreateBoard}
+      />
+
+      <NewUserModal
+        open={showNewUser}
+        onClose={() => setShowNewUser(false)}
+        setores={setores}
+        onCreate={onCreateUser}
       />
 
       {toast && (

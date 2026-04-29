@@ -7,7 +7,8 @@ export default function Sidebar({
   view,
   onChangeView,
   isAdmin,
-  onCreateBoard
+  onCreateBoard,
+  onCreateUser
 }) {
   const initials = (me?.nome || "U").split(" ").map((p) => p[0]).slice(0, 2).join("").toUpperCase();
 
@@ -40,9 +41,14 @@ export default function Sidebar({
         </div>
       ))}
       {isAdmin && (
-        <button className="btn-secondary" style={{ width: "100%", marginTop: 8 }} onClick={onCreateBoard}>
-          + Novo quadro
-        </button>
+        <>
+          <button className="btn-secondary" style={{ width: "100%", marginTop: 8 }} onClick={onCreateBoard}>
+            + Novo quadro
+          </button>
+          <button className="btn-secondary" style={{ width: "100%", marginTop: 6 }} onClick={onCreateUser}>
+            + Novo usuário
+          </button>
+        </>
       )}
 
       <div className="sidebar-footer">

@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://192.168.2.189:8000";
+
 const api = axios.create({
-  baseURL: "http://localhost:8000"
+  baseURL: API_BASE_URL
 });
 
 api.interceptors.request.use((config) => {
@@ -30,6 +32,7 @@ export const bootstrap = () => api.post("/setup/bootstrap").then((r) => r.data);
 
 export const getMe = () => api.get("/users/me").then((r) => r.data);
 export const listUsers = () => api.get("/users").then((r) => r.data);
+export const createUser = (payload) => api.post("/users", payload).then((r) => r.data);
 export const listSetores = () => api.get("/users/setores/list").then((r) => r.data);
 export const createSetor = (payload) => api.post("/users/setores/create", payload).then((r) => r.data);
 export const listBoards = () => api.get("/boards").then((r) => r.data);

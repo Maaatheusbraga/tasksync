@@ -12,6 +12,10 @@ class Settings(BaseSettings):
         "mssql+pyodbc://sa:YourStrong!Passw0rd@localhost/TaskSyncDB"
         "?driver=ODBC+Driver+17+for+SQL+Server"
     )
+    db_pool_size: int = 5
+    db_max_overflow: int = 10
+    db_pool_timeout: int = 30
+    db_pool_recycle_seconds: int = 1800
 
 
 settings = Settings()

@@ -38,28 +38,13 @@ export default function Login({ onLogin }) {
   return (
     <div className="login-shell">
       <aside className="login-hero">
-        <div className="brand">
+        <div className="brand login-brand-large">
           <div className="brand-mark">TS</div>
-          <div>TaskSync<br /><span style={{ fontSize: 11, color: "#c8d3e6", letterSpacing: 1 }}>CORPORATE KANBAN</span></div>
-        </div>
-        <div>
-          <h1>Execução com <span>accountability</span> total.</h1>
-          <p>
-            Pressão de prazo, auditoria completa e métricas operacionais em uma plataforma
-            interna feita para times que entregam. Bonita o suficiente para a diretoria,
-            rigorosa o suficiente para o gestor.
-          </p>
-          <ul className="login-features">
-            <li>Pressão visual por prazo</li>
-            <li>Trava real de conclusão</li>
-            <li>Trilha de auditoria</li>
-            <li>Métricas e gargalos</li>
-            <li>Permissões por papel</li>
-            <li>Notificações internas</li>
-          </ul>
-        </div>
-        <div style={{ color: "#9fb0d2", fontSize: 12 }}>
-          © {new Date().getFullYear()} TaskSync — uso interno
+          <div>
+            TaskSync
+            <br />
+            <span style={{ fontSize: 13, color: "#dce7fb", letterSpacing: 1.6 }}>CORPORATE KANBAN</span>
+          </div>
         </div>
       </aside>
 

@@ -7,6 +7,7 @@ import {
   createSetor,
   createSubtask,
   createTask,
+  createUser,
   deleteAttachment,
   deleteColumn,
   deleteComment,
@@ -190,6 +191,21 @@ export const useKanbanStore = create((set, get) => ({
     localStorage.setItem("boardId", String(board.id));
     set({ boards, setores, boardId: board.id });
     await get().loadBoard();
+  },
+
+  onCreateUser: async ({ nome, email, senha, role, setor_id }) => {
+    const payload = {
+      nome: nome.trim(),
+      email: email.trim(),
+      senha,
+      role,
+      setor_id: setor_id || null,
+      avatar_url: null
+    };
+    const created = await createUser(payload);
+    const users = await listUsers();
+    set({ users });
+    return created;
   },
 
   onRenameBoard: async (boardId, nome) => {
